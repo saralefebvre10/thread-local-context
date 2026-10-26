@@ -26,3 +26,10 @@ Exported names: `ContextPropagator`, with methods `set(key, value)`, `get(key, d
 `restore()` replaces the current thread's entire scope with a copy of the snapshot. If you set a key on the child thread *before* calling `restore()`, that value is discarded. The intended usage is to restore first, then mutate. Likewise, `clear()` only affects the calling thread — a parent thread's bindings survive a child calling `clear()`.
 
 Run the tests with `PYTHONPATH=src python -m unittest discover -s tests`.
+
+## Performance
+
+The window keeps a bounded buffer, so `push` is constant time and memory does not
+grow with the length of the stream. `peak` and `trough` are linear in the window
+size, which is the trade that keeps `push` cheap.
+
